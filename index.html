@@ -25,14 +25,22 @@
         <textarea data-template>
             ## Take Home Messages
 
-            - GPUs are a separate device with their own processors and memory
-            - GPUs have many (thousands) of cores
-            - Each core executes the same operations
-            - Vector operations are **very** fast compared to CPU
-            - Reductions are quite fast compared to CPU
-            - Transferring data to and from the GPU is a common bottleneck
+            - Separate devices with own memory
+            - Many (thousands) of cores
+            - Each does the same thing
+            - Vector operations are **very** fast
+            - Reductions are quite fast
+            - Transferring data is **slow**
             <aside data-markdown class="notes">
-                - This is all you need to know
+                - These points are a simplification
+                - But this is all you need to know
+                - GPUs are a separate device with their own processors and memory
+                - GPUs have many (thousands) of cores
+                - Many cores work together, performing the same operations on multiple pieces of data
+                - Each core executes the same operations
+                - Vector operations are **very** fast compared to CPU
+                - Reductions are quite fast compared to CPU
+                - Transferring data to and from the GPU is a common bottleneck
             </aside>
         </textarea>
     </section>
