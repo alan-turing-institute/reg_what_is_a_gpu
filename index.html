@@ -1,48 +1,153 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+    <title>What is a GPU?</title>
 
-		<link rel="stylesheet" href="reveal.js/dist/reset.css">
-		<link rel="stylesheet" href="reveal.js/dist/reveal.css">
-		<link rel="stylesheet" href="reveal.js/dist/theme/black.css">
+    <link rel="stylesheet" href="reveal.js/dist/reset.css">
+    <link rel="stylesheet" href="reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="reveal.js/dist/theme/moon.css">
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2
-						<aside class="notes">
-						<p>Some notes</p>
-						</aside>
-						<p>Some slide text</p>
-						<aside class="notes">
-						<p>and some more notes</p>
-					</aside>
-				</section>
-			</div>
-		</div>
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+    <section data-markdown>
+        <textarea data-template>
+            ## Take Home Messages
 
-		<script src="reveal.js/dist/reveal.js"></script>
-		<script src="reveal.js/plugin/notes/notes.js"></script>
-		<script src="reveal.js/plugin/markdown/markdown.js"></script>
-		<script src="reveal.js/plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
+            - GPUs are a separate device with their own processors and memory
+            - GPUs have many (thousands) of cores
+            - Each core executes the same operations
+            - Vector operations are **very** fast compared to CPU
+            - Reductions are quite fast compared to CPU
+            - Transferring data to and from the GPU is a common bottleneck
+            <aside data-markdown class="notes">
+                - This is all you need to know
+            </aside>
+        </textarea>
+    </section>
+    <section>
+        <section data-markdown>
+            <textarea data-template>
+                ## What is a GPU?
+            </textarea>
+        </section>
+        <section data-markdown>
+            <textarea data-template>
+                ### General-Purpose Computing on GPUs
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
+                - Graphical Processing Unit (GPU)
+                - Originally used to offload graphical processing and rendering from the CPU
+                - More recently support for GPGPU
+                - As throughput of GPUs increased with demand from computer games, 3D modelling
+                - Support for IEEE floating point and double-precision growing.
+            </textarea>
+        </section>
+        <section data-markdown>
+            <textarea data-template>
+                ### SIMD
+
+                - GPUs have many cores which perform the same operations
+                - The reality is more complex with groupings of cores, memory
+                - Single instruction multiple data
+            </textarea>
+        </section>
+    </section>
+    <section>
+        <section data-markdown>
+            <textarea data-template>
+                ## Programming a GPU
+            </textarea>
+        </section>
+        <section data-markdown>
+            <textarea data-template>
+                ## Device Kernel 1: Vector Add
+            </textarea>
+        </section>
+        <section data-markdown>
+            <textarea data-template>
+                ## Device Kernel 2: Matrix Multiplication
+            </textarea>
+        </section>
+        <section data-markdown>
+            <textarea data-template>
+                ## Host Code
+
+                - Identify devices
+                - Create context
+                - Allocate device/host memory
+                - **Enqueue** kernels with given dimensions, inputs
+            </textarea>
+        </section>
+        <section data-markdown>
+            <textarea data-template>
+                ## Higher Level Interface
+
+                - You *probably* shouldn't write kernels
+                - Are you likely to write a more performant and stable algorithm?
+                - Order of preference
+
+                1. Accelerated libraries (_e.g._ cuBLAS, numba, oneMKL, _etc._)
+                1. Embedded domain-specific languages (SYCL, OpenACC)
+                1. Kernels (CUDA, HIP, OpenCL)
+            </textarea>
+        </section>
+    </section>
+    <section>
+        <section data-markdown>
+            <textarea data-template>
+                ## Why do we Care?
+            </textarea>
+        </section>
+        <section data-markdown>
+            <textarea data-template>
+                ### Accelerating AI and ML
+            </textarea>
+        </section>
+        <section data-markdown>
+            <textarea data-template>
+                ### Energy Efficiency
+
+                - Typically higher FLOPS per Watt than CPU
+                - Data Centres
+                - Energy efficiency
+                - Recycling waste heat
+                - Lower impact cooling
+            </textarea>
+        </section>
+        <section data-markdown>
+            <textarea data-template>
+                ### Data Centres
+
+                - Maximising performance
+                - Multiple GPUs per node
+                - High speed interconnect between GPUs
+                - High performance storage
+            </textarea>
+        </section>
+    </section>
+</div>
+</div>
+
+<script src="reveal.js/dist/reveal.js"></script>
+<script src="reveal.js/plugin/notes/notes.js"></script>
+<script src="reveal.js/plugin/markdown/markdown.js"></script>
+<script src="reveal.js/plugin/highlight/highlight.js"></script>
+<script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+    });
+</script>
+</body>
 </html>
