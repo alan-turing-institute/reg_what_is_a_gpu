@@ -12,6 +12,10 @@
 
     <!-- Theme used for syntax highlighted code -->
     <link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css">
+    <style>
+        div.columns{display: flex; gap: min(4vw, 1.5em);}
+        div.column{flex: auto; overflow-x: auto;}
+    </style>
 </head>
 <body>
 <div class="reveal">
@@ -51,15 +55,42 @@
                 ## What is a GPU?
             </textarea>
         </section>
+        <section>
+            <h3>For Graphics</h3>
+            <div class="columns">
+                <div class="column" width="50%">
+                    <figure>
+                        <img src="img/geforce_2_MX400.jpg" alt="Nvidia RTX 4090">
+                        <figcaption><a href="https://commons.wikimedia.org/wiki/File:Geforce_2_MX400_32mb_1.jpg">Thiemo Schuff</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/de/deed.en">CC BY-SA 3.0 DE</a>, via Wikimedia Commons</figcaption>
+                    </figure>
+                </div>
+                <div class="column" width="50%">
+                    <figure>
+                        <img src="img/rtx_4090.png" alt="Nvidia RTX 4090" width="80%">
+                        <figcaption><a href="https://commons.wikimedia.org/wiki/File:NVIDIA_RTX_4090_Founders_Edition_-_Verpackung_(ZMASLO).png">ZMASLO</a>, <a href="https://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>, via Wikimedia Commons</figcaption>
+                    </figure>
+                </div>
+            </div>
+            <aside data-markdown class="notes">
+                - Graphical Processing Unit (GPU)
+                - Originally used to offload graphical processing and rendering from the CPU
+                - Handles 2D (shapes, sprites) and 3D graphics (polygons) acceleration
+                - Over time, demand from computer games, 3D modelling, digital image processing drove an increase in power of GPUs
+                - Example pictures showing 1. AGP/PCI power, no heat sink 2. Dedicated power, active cooling
+                - **link to next slide**
+            </aside>
+        </section>
         <section data-markdown>
             <textarea data-template>
                 ### General-Purpose Computing on GPUs
 
-                - Graphical Processing Unit (GPU)
-                - Originally used to offload graphical processing and rendering from the CPU
                 - More recently support for GPGPU
-                - As throughput of GPUs increased with demand from computer games, 3D modelling
+                - Similar to vector processors
                 - Support for IEEE floating point and double-precision growing.
+                <aside data-markdown class="notes">
+                    - As the computational throughput increased, interest in using GPUs for general-purpose computing arose
+                    - Somewhat similar to vector processors seen in supercomputers in the 70s–80s
+                </aside>
             </textarea>
         </section>
         <section data-markdown>
