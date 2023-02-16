@@ -31,7 +31,8 @@
 
             - Separate devices with own memory
             - Many (thousands) of cores
-            - Each does the same thing
+            - Cores do the same operations on an input stream
+            <!-- - Each does the same thing -->
             - Vector operations are **very** fast
             - Reductions are quite fast
             - Transferring data is **slow**
@@ -84,29 +85,94 @@
             <textarea data-template>
                 ### General-Purpose Computing on GPUs
 
-                - More recently support for GPGPU
-                - Similar to vector processors
-                - Support for IEEE floating point and double-precision growing.
+                - Many graphics operations are vector operations
+                - Interest in GPGPU grew as GPU throughput increased
+                - Similar to past interest in vector processors
+                - Support for IEEE floating point and double-precision
                 <aside data-markdown class="notes">
-                    - As the computational throughput increased, interest in using GPUs for general-purpose computing arose
+                    - It just so happens that many graphics operations benefit from vectorisation
+                    - GPUs have core which operate at much lower frequencies than CPUs
+                    - However, for operations that can be vectorised they give greater performance due to their large number of cores being able to work together
+                    - And so, as the computational throughput increased, interest in using GPUs for general-purpose computing arose
                     - Somewhat similar to vector processors seen in supercomputers in the 70s–80s
+                    - Features of interest to general computation like higher precision IEEE types have been developed
                 </aside>
             </textarea>
         </section>
-        <section data-markdown>
-            <textarea data-template>
-                ### SIMD
+        <section>
+            <h3>How a GPU performs calculations</h3>
 
-                - GPUs have many cores which perform the same operations
-                - The reality is more complex with groupings of cores, memory
-                - Single instruction multiple data
-            </textarea>
+            <ul>
+                <li>GPUs are separate devices, you <i>enqueue</i> kernels  on inputs</li>
+                <li>Stream processors — kernels are applied to the whole data</li>
+                <li>GPU coordinates many cores to apply the same kernel to elements of the input</li>
+                <li>Outputs can be copied back to the host</li>
+            </ul>
+            <aside data-markdown class="notes">
+                - GPUs are like a stream processor, coprocessor
+                - Kernels are defined and applied to the _whole_ data
+                - Host code enqueues a kernel on the inputs
+                - The GPU coordinates its resources to solve the problem
+                - Loops can be 'unrolled'. Many iterations happen at once (if there are no dependencies between iterations)
+                - The host can retrieve the output when it is ready
+            </aside>
+        </section>
+        <section>
+            <h3>In relation to other Paradigms</h3>
+
+            <div class="columns">
+                <div class="column" width="50%">
+                    Sequential
+                    <pre><code class="julia" data-trim data-noescape>
+                    a = rand(N)
+                    b = rand(N)
+
+                    for i = 1:N
+                        a[i] = a[i] + b[i]
+                    end
+                    </code></pre>
+                </div>
+                <div class="column" width="50%">
+                    Vectorisation and SIMD
+                    <pre><code class="julia" data-trim data-noescape>
+                    a = rand(N)
+                    b = rand(N)
+
+                    a .+= b
+                    </code></pre>
+                </div>
+            </div>
+            Stream
+            <pre><code class="julia" data-trim data-noescape>
+            using CUDA
+
+            a_d = CUDA.rand(N)
+            b_d = CUDA.rand(N)
+
+            @cuda threads=256 gpu_add!(a_d, b_d)
+            </code></pre>
+
+            Adapted from <a href="https://cuda.juliagpu.org/v4.0/tutorials/introduction/">CUDA.jl introduction</a>
+            <aside data-markdown class="notes">
+                - Simple example of element wise addition of two arrays in Julia
+                - In conventional, sequential code each element is summed one at a time
+                - Implying here that the CPU will do each addition one at a time, although a _good_ compiler will try to vectorise this
+                - CPUs may support vector or SIMD operations where multiple additions will happen simulataneously
+                - Compilers may translate the high level language to SIMD/vector CPU instructions
+                - In the stream example
+                  - The data is defined (`_d` indicates the memory is allocated on the device)
+                  - The kernel (not shown here) is enqueued
+                  - CUDA.jl hides a lot of the complexity here
+            </aside>
         </section>
     </section>
     <section>
         <section data-markdown>
             <textarea data-template>
                 ## Programming a GPU
+
+                - Kernel and host code
+                - The kernel will probably look like the body of a loop
             </textarea>
         </section>
         <section data-markdown>
