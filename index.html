@@ -12,6 +12,7 @@
 
     <!-- Theme used for syntax highlighted code -->
     <link rel="stylesheet" href="reveal.js/plugin/highlight/monokai.css">
+
     <style>
         div.columns{display: flex; gap: min(4vw, 1.5em);}
         div.column{flex: auto; overflow-x: auto;}
@@ -173,17 +174,116 @@
 
                 - Kernel and host code
                 - The kernel will probably look like the body of a loop
+                - The _same_ code will be executed on _every_ core
+                - Use indices (thread and block id) to operate on different data
+                <aside data-markdown class="notes">
+                    - Writing lower level code for GPU, you will need to define the kernel and host code enqueuing the kernel
+                    - You have to imagine the _same_ piece of code being run on _every_ core
+                    - To make each core operate on different data, we use indices representing the dimensions of the problem
+                </aside>
             </textarea>
         </section>
-        <section data-markdown>
-            <textarea data-template>
-                ## Device Kernel 1: Vector Add
-            </textarea>
+        <section>
+            <h3>Kernel 1: Vector Addition</h3>
+
+            \[\mathbf{c}_{i}=\mathbf{a}_{i}+\mathbf{b}_{i}\]
+
+            <pre><code class="c" data-trim data-noescape>
+                __kernel void vadd(
+                    __global const float* a,
+                    __global const float* b,
+                    __global float* c
+                ) {
+                    // Get global dimension 0 (of 3)
+                    int gid = get_global_id(0);
+                    // Add elements gid of a and b, store in c
+                    c[gid] = a[gid] + b[gid];
+                }
+            </code></pre>
+            <aside data-markdown class="notes">
+                - These examples are OpenCL as `global_id` simplifies getting a cores index
+                - Core in GPUs are actually grouped
+                  - GPU → Compute Units/Streaming Multiprocessors → cores
+                - Problems are broken down
+                    - In CUDA Grid → Block → Thread
+                    - In OpenCL NDRange → Work Group → Work Item
+                - Knowing the details is important for getting optimal performance as cores in the same group can share faster, local memory
+            </aside>
         </section>
-        <section data-markdown>
-            <textarea data-template>
-                ## Device Kernel 2: Matrix Multiplication
-            </textarea>
+        <section>
+            <h3>Kernel 2: Matrix Multiplication</h3>
+
+            \[\mathbf{c}_{ij} = \sum_{k=1}^{n} a_{ik}b_{kj}\]
+
+            <div class="r-stack">
+            <pre class="fragment fade-out"><code class="c" data-trim data-noescape>
+                __kernel void matmul(
+                    const int i_max, const int k_max,
+                    const __global float* A, const __global float* B,
+                    __global float* C
+                ) {
+                    // Get two global dimensions
+                    const int i = get_global_id(0);
+                    const int j = get_global_id(1);
+
+                    // Calculate element ij of C
+                    float acc = 0.0f;
+                    for (int k=0; k < k_max; k++) {
+                       // Column major elements
+                       acc += A[k*i_max + i] * B[j*k_max + k];
+                    }
+
+                    // Store the result
+                    C[i*i_max + j] = acc;
+                }
+            </code></pre>
+            <p class="fragment current-visible">
+                <ul>
+                    <li>This is a poor algorithm</li>
+                    <li>Order of 10<sup>2</sup> slower than library routines</li>
+                </ul>
+            </p>
+            </div>
+            <aside data-markdown class="notes">
+                - This algorithm is terrible
+                - Efficient matrix multiplication algorithms use many trick to optimise performance
+            </aside>
+        </section>
+        <section>
+            <h3>Kernel 3: Sum Reduction</h3>
+
+            \[b = \sum_{i=0}^{N} a_{i}\]
+            <pre><code class="c" data-trim data-noescape>
+            __kernel void sum(__global float* a, __local float* b,
+                  __global float* partials) {
+            int gid = get_global_id(0);
+
+            int lid = get_local_id(0);
+            int lsize = get_local_size(0);
+            int wg = get_group_id(0);
+
+            // Copy to local memory
+            b[lid] = a[gid];
+            barrier(CLK_LOCAL_MEM_FENCE);
+
+            // Reduction within work group, sum is left in b[0]
+            for (int stride=lsize>>1; stride>0; stride>>=1) {
+                if (lid < stride) {
+                    b[lid] += b[lid+stride];
+                }
+                barrier(CLK_LOCAL_MEM_FENCE);
+            }
+
+            // Local thread 0 copies its work group sum to the result array
+            if (lid == 0) {
+                partials[wg] = b[0];
+            }
+        }
+        </code></pre>
+        <aside data-markdown class="notes">
+            - Actually returns one element per working group
+            - Need to pad the input to be a power of 2
+        </aside>
         </section>
         <section data-markdown>
             <textarea data-template>
@@ -249,6 +349,7 @@
 <script src="reveal.js/plugin/notes/notes.js"></script>
 <script src="reveal.js/plugin/markdown/markdown.js"></script>
 <script src="reveal.js/plugin/highlight/highlight.js"></script>
+<script src="reveal.js/plugin/math/math.js"></script>
 <script>
     // More info about initialization & config:
     // - https://revealjs.com/initialization/
@@ -257,7 +358,7 @@
         hash: true,
 
         // Learn about plugins: https://revealjs.com/plugins/
-        plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+        plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX ]
     });
 </script>
 </body>
