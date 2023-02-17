@@ -183,6 +183,7 @@
                     - Writing lower level code for GPU, you will need to define the kernel and host code enqueuing the kernel
                     - You have to imagine the _same_ piece of code being run on _every_ core
                     - To make each core operate on different data, we use indices representing the dimensions of the problem
+                    - Anyone who has written MPI code will find this familiar
                 </aside>
             </textarea>
         </section>
@@ -280,8 +281,15 @@
         }
         </code></pre>
         <aside data-markdown class="notes">
+            - Example shows work groups and local memory
+            - Each core copies one element to local memory
+            - Within each work group
+              - Repeatly divide the local array in half
+              - Sum top and bottom half
+            - This way it takes the square root of the local size iterations to complete
             - Actually returns one element per working group
-            - Need to pad the input to be a power of 2
+            - The results are in local memory, would need to copy back to global memory to get a scalar result
+            - Need to pad the input so that each work group has a list length power of 2
         </aside>
         </section>
         <section data-markdown>
