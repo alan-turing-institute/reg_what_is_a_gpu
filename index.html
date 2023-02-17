@@ -219,7 +219,7 @@
             \[\mathbf{c}_{ij} = \sum_{k=1}^{n} a_{ik}b_{kj}\]
 
             <div class="r-stack">
-            <pre class="fragment fade-out"><code class="c" data-trim data-noescape>
+            <pre><code class="c" data-trim data-noescape>
                 __kernel void matmul(
                     const int i_max, const int k_max,
                     const __global float* A, const __global float* B,
@@ -240,15 +240,9 @@
                     C[i*i_max + j] = acc;
                 }
             </code></pre>
-            <p class="fragment current-visible">
-                <ul>
-                    <li>This is a poor algorithm</li>
-                    <li>Order of 10<sup>2</sup> slower than library routines</li>
-                </ul>
-            </p>
-            </div>
             <aside data-markdown class="notes">
                 - This algorithm is terrible
+                - Order of 10^2 slower than library routines
                 - Efficient matrix multiplication algorithms use many trick to optimise performance
             </aside>
         </section>
