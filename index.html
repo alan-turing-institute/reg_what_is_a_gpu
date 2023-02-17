@@ -257,8 +257,10 @@
 
             \[b = \sum_{i=0}^{N} a_{i}\]
             <pre><code class="c" data-trim data-noescape>
-            __kernel void sum(__global float* a, __local float* b,
-                  __global float* partials) {
+            __kernel void sum(
+                __global float* a, __local float* b,
+                __global float* partials
+            ) {
             int gid = get_global_id(0);
 
             int lid = get_local_id(0);
