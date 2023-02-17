@@ -309,6 +309,55 @@
                 </aside>
             </textarea>
         </section>
+        <section>
+            <h3>Host Code Example</h3>
+
+            Adapted from <a href="https://github.com/inducer/pyopencl/blob/main/examples/demo.py">PyOpenCL demo example</a>
+
+            <pre><code class="python" data-trim data-noescape>
+            import numpy as np
+            import pyopencl as cl
+
+            # Create input on host
+            a_h = np.random.rand(50000).astype(np.float32)
+            b_h = np.random.rand(50000).astype(np.float32)
+
+            ctx = cl.create_some_context()
+            queue = cl.CommandQueue(ctx)
+
+            # Allocate device memory for inputs
+            mf = cl.mem_flags
+            a_d = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR,
+                            hostbuf=a_h)
+            b_d = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR,
+                            hostbuf=b_h)
+
+            # Compile kernels
+            prg = cl.Program(ctx, """
+            __kernel void sum(
+                __global const float *a_d, __global const float *b_d,
+                __global float *res_d
+            ) {
+              int gid = get_global_id(0);
+              res_d[gid] = a_d[gid] + b_d[gid];
+            }
+            """).build()
+
+            # Allocate device memory for results
+            res_d = cl.Buffer(ctx, mf.WRITE_ONLY, a_h.nbytes)
+
+            # Enqueue sum kernel
+            knl = prg.sum
+            knl(queue, a_h.shape, None, a_d, b_d, res_d)
+            # Kernel.__call__(queue, global_size, local_size, *args,
+            #                 global_offset=None, wait_for=None,
+            #                 g_times_l=False, allow_empty_ndrange=False)
+
+            # Enqueue copying results back to host, blocking by default
+            res_h = np.empty_like(a_h)
+            cl.enqueue_copy(queue, res_h, res_d)
+            </code></pre>
+        </section>
         <section data-markdown>
             <textarea data-template>
                 ## Higher Level Interface
