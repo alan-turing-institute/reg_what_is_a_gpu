@@ -435,12 +435,21 @@
         </section>
         <section data-markdown>
             <textarea data-template>
-                ### Data Centres
+                ### HPC
 
-                - Maximising performance
+                - Faster calculations, larger problems
+                - Designed to maximising performance
                 - Multiple GPUs per node
                 - High speed interconnect between GPUs
                 - High performance storage
+                <aside data-markdown class="notes">
+                    - There are multiple GPU focused HPC systems available for research
+                    - They focus on optimising performance and will (almost certainly) perform much better than your laptop/workstation/cloud
+                    - Feature high-end, data-centre GPUs
+                    - Multiple GPUs can be used in a single job
+                    - GPUs are connected to the host and to each other by high-speed fabric (remember that data transfer is often rate limited)
+                    - High-speed, parallel storage appliances and on-node NVMe storage are common. Accelerates reading large data sets and writing checkpoints (model weights).
+                </aside>
             </textarea>
         </section>
     </section>
