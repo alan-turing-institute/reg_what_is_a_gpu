@@ -364,11 +364,20 @@
 
                 - You *probably* shouldn't write kernels
                 - Are you likely to write a more performant and stable algorithm?
-                - Order of preference
 
-                1. Accelerated libraries (_e.g._ cuBLAS, numba, oneMKL, _etc._)
+                #### Order of Preference
+
+                1. Accelerated libraries (cuBLAS, numba, oneMKL)
                 1. Embedded domain-specific languages (SYCL, OpenACC)
                 1. Kernels (CUDA, HIP, OpenCL)
+                <aside data-markdown class="notes">
+                    - You are unlikely to be able to beat the performance of library kernels
+                    - So, if you can use or combine library kernels to solve your problem that should be more performant and easier to write/maintain
+                    - If you need to do something bespoke, eDSLs can get very close to kernel performance within one language
+                    - Using an eDSL looks like OpenMP with directives (pragmas)
+                    - If neither of those options work, you might want to write kernels
+                    - However these will probably be harder to make robust and transferable
+                </aside>
             </textarea>
         </section>
     </section>
