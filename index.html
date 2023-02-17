@@ -289,9 +289,24 @@
                 ## Host Code
 
                 - Identify devices
-                - Create context
+                - Create context(s) (object use to interact with a set of devices)
+                - Optionally compile kernels
                 - Allocate device/host memory
                 - **Enqueue** kernels with given dimensions, inputs
+                <aside data-markdown class="notes">
+                    - The size and complexity of the host code will depend on the language you use
+                    - For example, Python and Julia have modules which handle a lot of the process for the user
+                    - In contrast, in C/C++ you will probably need a lot more boiler plate to
+                    - It is in the host cost that you
+                        - Identify devices
+                        - Create context
+                        - Allocate device/host memory
+                        - Possibly compile kernels
+                        - **Enqueue** kernels with given dimensions, inputs
+                        - Notice how in the kernels we didn't specify the dimensions on the inputs
+                        - This is because we assign the kernels to the whole input data
+
+                </aside>
             </textarea>
         </section>
         <section data-markdown>
