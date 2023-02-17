@@ -389,7 +389,36 @@
         </section>
         <section data-markdown>
             <textarea data-template>
-                ### Accelerating AI and ML
+                ### Acceleration
+
+                #### AI
+
+                - AI (ML) involves many matrix operations
+                - ML frameworks (Torch, Tensorflow, MXNet)
+
+                #### Data Science
+
+                - Analysis on large data sets
+                - Dataframe and distributed computing libraries
+                - GPGPU on workstations
+                - HPC increasingly supporting interactive usage
+                <aside data-markdown class="notes">
+                    ## AI
+
+                    - The most difficult parts of AI (ML) calculations are matrix operations
+                    - Matrix operations can be greatly accelerated on GPUs compared to CPUs
+                    - Popular ML frameworks support GPU acceleration out of the box
+                    - Users don't need to deal with lower level interaction with GPUs
+                    - Nvidia GPUs, through CUDA, tend to have the best support currently
+
+                    ## Data Science
+
+                    - Analysis on large data sets can benefit
+                    - Vector operations and reductions in particular
+                    - Dataframe and distributed computing libraries with GPU support
+                    - Consumer GPUs are reasonably powerful and support GPGPU so you don't necessarily need to use HPC to benefit
+                    - HPC systems are increasingly supporting interactive usage and notebook interfaces
+                </aside>
             </textarea>
         </section>
         <section data-markdown>
