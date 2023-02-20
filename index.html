@@ -147,6 +147,7 @@
                 </div>
             </div>
             Stream
+            Adapted from <a href="https://cuda.juliagpu.org/v4.0/tutorials/introduction/">CUDA.jl introduction</a> (<a href="#/cudajl-license">License</a>)
             <pre><code class="julia" data-trim data-noescape>
             using CUDA
 
@@ -155,8 +156,6 @@
 
             @cuda threads=256 gpu_add!(a_d, b_d)
             </code></pre>
-
-            Adapted from <a href="https://cuda.juliagpu.org/v4.0/tutorials/introduction/">CUDA.jl introduction</a>
             <aside data-markdown class="notes">
                 - Simple example of element wise addition of two arrays in Julia
                 - In conventional, sequential code each element is summed one at a time
@@ -320,7 +319,7 @@
         <section>
             <h3>Host Code Example</h3>
 
-            Adapted from <a href="https://github.com/inducer/pyopencl/blob/main/examples/demo.py">PyOpenCL demo example</a>
+            Adapted from <a href="https://github.com/inducer/pyopencl/blob/main/examples/demo.py">PyOpenCL demo example</a> (<a href="#/pyopencl-license">License</a>)
 
             <pre><code class="python" data-trim data-noescape>
             import numpy as np
@@ -459,6 +458,72 @@
                     - High-speed, parallel storage appliances and on-node NVMe storage are common. Accelerates reading large data sets and writing checkpoints (model weights).
                 </aside>
             </textarea>
+        </section>
+    </section>
+    <section>
+        <section>
+            <h2>Licenses</h2>
+    </section>
+        <section id="pyopencl-license">
+            <h3>PyOpenCL</h3>
+            <pre><code class="txt" data-trim data-noescape>
+            PyOpenCL is licensed to you under the MIT/X Consortium license:
+
+            Copyright (c) 2009-13 Andreas Klöckner and Contributors.
+
+            Permission is hereby granted, free of charge, to any person
+            obtaining a copy of this software and associated documentation
+            files (the "Software"), to deal in the Software without
+            restriction, including without limitation the rights to use,
+            copy, modify, merge, publish, distribute, sublicense, and/or sell
+            copies of the Software, and to permit persons to whom the
+            Software is furnished to do so, subject to the following
+            conditions:
+
+            The above copyright notice and this permission notice shall be
+            included in all copies or substantial portions of the Software.
+
+            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+            EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+            OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+            NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+            HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+            WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+            FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+            OTHER DEALINGS IN THE SOFTWARE.
+            </code></pre>
+        </section>
+        <section id="cudajl-license">
+            <h3>CUDA.jl</h3>
+            <pre><code class="txt" data-trim data-noescape>
+            The CUDA.jl package is licensed under the MIT "Expat" License:
+
+            Copyright (c) 2019-present: Julia Computing and other contributors
+
+            Copyright (c) 2014-2018: Tim Besard
+
+            Copyright (c) 2013: Dahua Lin
+
+            All Rights Reserved.
+
+            Permission is hereby granted, free of charge, to any person obtaining a copy
+            of this software and associated documentation files (the "Software"), to deal
+            in the Software without restriction, including without limitation the rights
+            to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+            copies of the Software, and to permit persons to whom the Software is
+            furnished to do so, subject to the following conditions:
+
+            The above copyright notice and this permission notice shall be included in all
+            copies or substantial portions of the Software.
+
+            THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+            IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+            FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+            AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+            LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+            OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+            SOFTWARE.
+            </code></pre>
         </section>
     </section>
 </div>
