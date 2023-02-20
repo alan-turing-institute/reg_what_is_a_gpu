@@ -248,7 +248,6 @@
         </section>
         <section>
             <h3>Kernel 3: Sum Reduction</h3>
-
             \[b = \sum_{i=0}^{N} a_{i}\]
             <pre><code class="c" data-trim data-noescape>
             __kernel void sum(
@@ -273,7 +272,8 @@
                 barrier(CLK_LOCAL_MEM_FENCE);
             }
 
-            // Local thread 0 copies its work group sum to the result array
+            // Local thread 0 copies its work group's sum
+            // to the result array
             if (lid == 0) {
                 partials[wg] = b[0];
             }
