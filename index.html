@@ -191,18 +191,26 @@
 
             \[\mathbf{c}_{i}=\mathbf{a}_{i}+\mathbf{b}_{i}\]
 
-            <pre><code class="c" data-trim data-noescape>
-                __kernel void vadd(
-                    __global const float* a,
-                    __global const float* b,
-                    __global float* c
-                ) {
-                    // Get global dimension 0 (of 3)
-                    int gid = get_global_id(0);
-                    // Add elements gid of a and b, store in c
-                    c[gid] = a[gid] + b[gid];
-                }
-            </code></pre>
+            <div class="columns">
+                <div class="column" width="50%">
+                    <pre><code class="c" data-trim data-noescape>
+                        __kernel void vadd(
+                            __global const float* a,
+                            __global const float* b,
+                            __global float* c
+                        ) {
+                            // Get global dimension 0 (of 3)
+                            int i = get_global_id(0);
+                            // Add elements i of a and b
+                            // store in c
+                            c[i] = a[i] + b[i];
+                        }
+                    </code></pre>
+                </div>
+                <div class="column" width="50%">
+                    <img src="img/vec_add.png" alt="Vector addition" width="300px">
+                </div>
+            </div>
             <aside data-markdown class="notes">
                 - These examples are OpenCL as `global_id` simplifies getting a cores index
                 - Core in GPUs are actually grouped
