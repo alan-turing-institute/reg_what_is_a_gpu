@@ -256,48 +256,57 @@
         </section>
         <section>
             <h3>Kernel 3: Sum Reduction</h3>
-            \[b = \sum_{i=0}^{N} a_{i}\]
+            <div class="columns">
+                <div class="column" width="30%">
+                    \[b = \sum_{i=0}^{N} a_{i}\]
+                </div>
+                <div class="column" width="70%">
+                    <img src="img/red_sum.png" alt="Vector addition" width="400px">
+                </div>
+            </div>
             <pre><code class="c" data-trim data-noescape>
             __kernel void sum(
                 __global float* a, __local float* b,
                 __global float* partials
             ) {
-            int gid = get_global_id(0);
+                int gid = get_global_id(0);
 
-            int lid = get_local_id(0);
-            int lsize = get_local_size(0);
-            int wg = get_group_id(0);
+                int lid = get_local_id(0);
+                int lsize = get_local_size(0);
+                int wg = get_group_id(0);
 
-            // Copy to local memory
-            b[lid] = a[gid];
-            barrier(CLK_LOCAL_MEM_FENCE);
-
-            // Reduction within work group, sum is left in b[0]
-            for (int stride=lsize>>1; stride>0; stride>>=1) {
-                if (lid < stride) {
-                    b[lid] += b[lid+stride];
-                }
+                // Copy to local memory
+                b[lid] = a[gid];
                 barrier(CLK_LOCAL_MEM_FENCE);
+
+                // Reduction within work group, sum is left in b[0]
+                for (int stride=lsize>>1; stride>0; stride>>=1) {
+                    if (lid < stride) {
+                        b[lid] += b[lid+stride];
+                    }
+                    barrier(CLK_LOCAL_MEM_FENCE);
+                }
+
+                // Local thread 0 copies its work group's sum
+                // to the result array
+                if (lid == 0) {
+                    partials[wg] = b[0];
+                }
             }
 
-            // Local thread 0 copies its work group's sum
-            // to the result array
-            if (lid == 0) {
-                partials[wg] = b[0];
-            }
-        }
-        </code></pre>
-        <aside data-markdown class="notes">
-            - Example shows work groups and local memory
-            - Each core copies one element to local memory
-            - Within each work group
-              - Repeatly divide the local array in half
-              - Sum top and bottom half
-            - This way it takes the square root of the local size iterations to complete
-            - Actually returns one element per working group
-            - The results are in local memory, would need to copy back to global memory to get a scalar result
-            - Need to pad the input so that each work group has a list length power of 2
-        </aside>
+            //
+            </code></pre>
+            <aside data-markdown class="notes">
+                - Example shows work groups and local memory
+                - Each core copies one element to local memory
+                - Within each work group
+                  - Repeatly divide the local array in half
+                  - Sum top and bottom half
+                - This way it takes the square root of the local size iterations to complete
+                - Actually returns one element per working group
+                - The results are in local memory, would need to copy back to global memory to get a scalar result
+                - Need to pad the input so that each work group has a list length power of 2
+            </aside>
         </section>
         <section data-markdown>
             <textarea data-template>
@@ -320,7 +329,6 @@
                         - **Enqueue** kernels with given dimensions, inputs
                         - Notice how in the kernels we didn't specify the dimensions on the inputs
                         - This is because we assign the kernels to the whole input data
-
                 </aside>
             </textarea>
         </section>
